@@ -1,0 +1,18 @@
+---
+
+- hosts: server
+
+  tasks:
+
+    - include: tasks/host-packages.yml
+      tags:
+        - packages
+
+    - include: tasks/host-vagrant.yml
+      tags:
+        - vagrant
+
+  handlers:
+
+    - include: handlers/host-main.yml
+      tags: always

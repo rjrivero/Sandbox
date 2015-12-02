@@ -1,0 +1,26 @@
+---
+
+- name: Update cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install kvm dependencies
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: no
+    state: present
+  with_items:
+    - python-libvirt
+    - libvirt-bin
+    - libvirt-dev
+    - qemu-kvm
+    # vMX
+    - linux-firmware
+    - cpu-checker
+    # Vagrant KVM
+    - libxslt-dev
+    - libxml2-dev
+    - libvirt-dev
+    - zlib1g-dev

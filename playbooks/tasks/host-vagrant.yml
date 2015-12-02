@@ -1,0 +1,27 @@
+---
+
+- name: Download Vagrant
+  get_url:
+    dest: "{{ ansible_env.HOME }}/vagrant_1.7.4_x86_64.deb"
+    force: no
+    url: "https://releases.hashicorp.com/vagrant/1.7.4/vagrant_1.7.4_x86_64.deb"
+
+- name: Install Vagrant
+  become: yes
+  apt:
+    deb: "{{ ansible_env.HOME }}/vagrant_1.7.4_x86_64.deb"
+    state: present
+    update_cache: no
+
+- name: Install Vagrant KVM plugins
+  command: vagrant plugin install "{{ item }}"
+  with_items:
+    - vagrant-libvirt
+    - vagrant-mutate
+    - vagrant-rekey-ssh
+
+- name: Download trusty box
+  command: vagrant box add ubuntu/trusty
+
+- name: Mutate trusty box to libvirt
+  command: vagrant box add ubuntu/trusty

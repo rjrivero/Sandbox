@@ -1,0 +1,14 @@
+---
+
+- hosts: routers
+
+  tasks:
+
+    - include: tasks/guest-packages.yml
+      tags:
+        - packages
+
+  handlers:
+
+    - include: handlers/guest-main.yml
+      tags: always

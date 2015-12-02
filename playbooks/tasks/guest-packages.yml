@@ -1,0 +1,27 @@
+---
+
+- name: Update cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install dependencies
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: no
+    state: present
+  with_items:
+    - qemu-kvm
+    - libvirt-bin
+    - libyaml-dev
+    - python-yaml
+    - libnuma-dev
+    - numactl
+    - libparted0-dev
+    - libpciaccess-dev
+    - libyajl-dev
+    - libxml2-dev
+    - libnl-dev
+    - python-netifaces
+
