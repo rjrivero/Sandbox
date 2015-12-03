@@ -24,3 +24,9 @@
     - libxml2-dev
     - libvirt-dev
     - zlib1g-dev
+    # LXDE "headless", usando el framebuffer
+    # http://superuser.com/questions/524811
+    - xvfb
+    - lightdm
+    - lxde
+    - x11vnc

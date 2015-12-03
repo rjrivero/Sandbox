@@ -1,0 +1,27 @@
+---
+
+- name: Create vmx config dir
+  become: yes
+  file:
+    dest: /opt/vmx
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+    state: directory
+   
+- name: Publish vmx mgmt network
+  copy:
+    src: files/vmx_mgmt.xml
+    dest: /opt/vmx/vmx_mgmt.xml
+
+- name: Create vMX_mgmt libvirt network
+  command: virsh net-define /opt/vmx/vmx_mgmt.xml
+  ignore_errors: true
+
+- name: Set vMX_mgmt libvirt network to autostart
+  command: virsh net-autostart vMX_mgmt
+  ignore_errors: true
+
+- name: Start vMX_mgmt network
+  command: virsh net-start vMX_mgmt
+  ignore_errors: true

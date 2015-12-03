@@ -8,6 +8,14 @@
       tags:
         - packages
 
+    - include: tasks/hugepages.yml
+      tags:
+        - hugepages
+
+    - include: tasks/host-vmx.yml
+      tags:
+        - vmx
+
     - include: tasks/host-vagrant.yml
       tags:
         - vagrant

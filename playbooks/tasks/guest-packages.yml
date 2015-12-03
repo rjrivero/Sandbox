@@ -12,16 +12,30 @@
     update_cache: no
     state: present
   with_items:
+    - bridge-utils
     - qemu-kvm
     - libvirt-bin
+    - python
+    - python-netifaces
+    - vnc4server
     - libyaml-dev
     - python-yaml
-    - libnuma-dev
     - numactl
     - libparted0-dev
     - libpciaccess-dev
+    - libnuma-dev
     - libyajl-dev
     - libxml2-dev
+    - libglib2.0-dev
     - libnl-dev
-    - python-netifaces
+    - python-pip
+    - python-dev
+    - libxml2-dev
+    - libxslt-dev
 
+- name: Add ansible user to libvirtd group
+  become: yes
+  user:
+    name: "{{ ansible_ssh_user }}"
+    groups: libvirtd
+    append: true

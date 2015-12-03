@@ -1,0 +1,28 @@
+---
+
+- name: Enable kernel hugepages
+  become: yes
+  copy:
+    src: files/90-hugepages.conf
+    dest: /etc/sysctl.d
+    owner: root
+    mode: 0644
+ 
+- name: Apply sysctl options
+  become: yes
+  command: /sbin/sysctl -p --system
+
+- name: Enable KVM Hugepages
+  become: yes
+  lineinfile:
+    dest: /etc/default/qemu-kvm
+    regexp: ^KVM_HUGEPAGES
+    line: KVM_HUGEPAGES=1
+  register: hugepages
+
+- name: Restart libvirt service if Hugepages modified
+  become: yes
+  when: hugepages.changed
+  service:
+    name: libvirt-bin
+    state: restarted

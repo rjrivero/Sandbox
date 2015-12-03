@@ -1,0 +1,29 @@
+---
+
+- name: Set vMX version names
+  set_fact:
+    vmx_version:  "15.1F3.11"
+    vfpc_version: "20151017"
+
+- name: Create vMX directory
+  become: yes
+  file:
+    dest: /opt/vmx
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+    state: directory
+
+- name: Unpack vMX package
+  unarchive:
+    copy: yes
+    src: files/vmx-{{ vmx_version }}.tgz
+    dest: /opt/vmx
+    creates: /opt/vmx/vmx-{{ vmx_version }}/
+
+- name: Set vmx.conf
+  template:
+    src: templates/vmx.conf
+    dest: /opt/vmx/vmx-{{ vmx_version }}/config/vmx.conf
+    mode: 0644
+

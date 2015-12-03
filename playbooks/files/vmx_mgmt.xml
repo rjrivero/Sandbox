@@ -1,0 +1,11 @@
+<!-- vMX management network -->
+<network>
+  <name>vMX_mgmt</name>
+  <bridge name="virbr100"/>
+  <forward mode="route" dev="eth0"/>
+  <ip address="192.168.199.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.199.2" end="192.168.199.127" />
+    </dhcp>
+  </ip>
+</network>

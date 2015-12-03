@@ -1,0 +1,4 @@
+<network>
+  <name>vRX_Network</name>
+  <bridge name="virbr100" />
+</network>

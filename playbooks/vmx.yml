@@ -8,6 +8,14 @@
       tags:
         - packages
 
+    - include: tasks/hugepages.yml
+      tags:
+        - hugepages
+
+    - include: tasks/guest-vmx.yml
+      tags:
+        - vmx
+
   handlers:
 
     - include: handlers/guest-main.yml

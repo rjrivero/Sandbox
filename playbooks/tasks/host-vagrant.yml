@@ -21,7 +21,11 @@
     - vagrant-rekey-ssh
 
 - name: Download trusty box
-  command: vagrant box add ubuntu/trusty
+  command: vagrant box add ubuntu/trusty64
+  register: trusty
+  ignore_errors: true
 
 - name: Mutate trusty box to libvirt
-  command: vagrant box add ubuntu/trusty
+  when: trusty.changed
+  command: vagrant mutate ubuntu/trusty64 libvirt
+
