@@ -7,30 +7,106 @@ vfpc_version: "20151017"
 # Instancias VMX
 vmx_instances:
 
-  - name: vMX1
+  - name: v11
     vcp_port: 8611
-    vfp_port: 8612
+    vfp_port: 8711
     vcp_ip: 192.168.199.11
-    vfp_ip: 192.168.199.12
+    vfp_ip: 192.168.199.111
     # Utilizo el cuarfto byte de las MACs como identificador del host
-    vcp_mac: 0a:00:dd:01:01:01
-    vfp_mac: 0a:00:dd:01:01:02
+    vcp_mac: 0a:00:dd:11:01:01
+    vfp_mac: 0a:00:dd:11:01:02
     interfaces:
-      - 0a:00:dd:01:00:00
-      - 0a:00:dd:01:00:01
-      - 0a:00:dd:01:00:02
-      - 0a:00:dd:01:00:03
+      - 0a:00:dd:11:00:00
+      - 0a:00:dd:11:00:01
     
-  - name: vMX2
-    vcp_port: 8621
-    vfp_port: 8622
-    vcp_ip: 192.168.199.21
-    vfp_ip: 192.168.199.22
-    vcp_mac: 0a:00:dd:02:01:01
-    vfp_mac: 0a:00:dd:02:01:02
+  - name: v12
+    vcp_port: 8612
+    vfp_port: 8712
+    vcp_ip: 192.168.199.12
+    vfp_ip: 192.168.199.112
+    vcp_mac: 0a:00:dd:12:01:01
+    vfp_mac: 0a:00:dd:12:01:02
     interfaces:
-      - 0a:00:dd:02:00:00
-      - 0a:00:dd:02:00:01
-      - 0a:00:dd:02:00:02
-      - 0a:00:dd:02:00:03
+      - 0a:00:dd:12:00:00
+      - 0a:00:dd:12:00:01
  
+  - name: v21
+    vcp_port: 8621
+    vfp_port: 8721
+    vcp_ip: 192.168.199.21
+    vfp_ip: 192.168.199.121
+    vcp_mac: 0a:00:dd:21:01:01
+    vfp_mac: 0a:00:dd:21:01:02
+    interfaces:
+      - 0a:00:dd:21:00:00
+      - 0a:00:dd:21:00:01
+ 
+  - name: v22
+    vcp_port: 8622
+    vfp_port: 8722
+    vcp_ip: 192.168.199.22
+    vfp_ip: 192.168.199.122
+    vcp_mac: 0a:00:dd:22:01:01
+    vfp_mac: 0a:00:dd:22:01:02
+    interfaces:
+      - 0a:00:dd:22:00:00
+      - 0a:00:dd:22:00:01
+ 
+  - name: v31
+    vcp_port: 8631
+    vfp_port: 8731
+    vcp_ip: 192.168.199.31
+    vfp_ip: 192.168.199.131
+    vcp_mac: 0a:00:dd:31:01:01
+    vfp_mac: 0a:00:dd:31:01:02
+    interfaces:
+      - 0a:00:dd:31:00:00
+      - 0a:00:dd:31:00:01
+ 
+  - name: vHUB
+    vcp_port: 8699
+    vfp_port: 8799
+    vcp_ip: 192.168.199.99
+    vfp_ip: 192.168.199.199
+    vcp_mac: 0a:00:dd:99:01:01
+    vfp_mac: 0a:00:dd:99:01:02
+    interfaces:
+      - 0a:00:dd:99:00:00
+      - 0a:00:dd:99:00:01
+      - 0a:00:dd:99:00:02
+      - 0a:00:dd:99:00:03
+      - 0a:00:dd:99:00:04
+ 
+vmx_links:
+  # Todos estan conectados en estrella al hub
+  - endpoint_1:
+      vm: vHUB
+      device: ge-0/0/0
+    endpoint_2:
+      vm: v11
+      device: ge-0/0/1
+  - endpoint_1:
+      vm: vHUB
+      device: ge-0/0/1
+    endpoint_2:
+      vm: v12
+      device: ge-0/0/1
+  - endpoint_1:
+      vm: vHUB
+      device: ge-0/0/2
+    endpoint_2:
+      vm: v21
+      device: ge-0/0/1
+  - endpoint_1:
+      vm: vHUB
+      device: ge-0/0/3
+    endpoint_2:
+      vm: v22
+      device: ge-0/0/1
+  - endpoint_1:
+      vm: vHUB
+      device: ge-0/0/4
+    endpoint_2:
+      vm: v31
+      device: ge-0/0/1
+

@@ -31,3 +31,18 @@
     mode: 0644
   with_items: vmx_instances
 
+- name: Add vMX links
+  template:
+    src: templates/vmx-junosdev.conf
+    dest: "/opt/vmx/vmx-{{ vmx_version }}/config/vmx-junosdev.conf"
+    mode: 0644
+
+# Prefiero instalarlos manualmente, porque tardan un web...
+#- name: Launch vMX instances
+#  become: yes
+#  command: ./vmx.sh -lv --install --cfg config/vmx-{{ item.name }}.conf
+#  args:
+#    chdir: "/opt/vmx/vmx-{{ vmx_version }}"
+#    creates: "/opt/vmx/vmx-{{ vmx_version }}/build/{{ item.name }}"
+#  with_items: vmx_instances
+

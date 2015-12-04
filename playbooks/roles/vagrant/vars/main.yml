@@ -1,0 +1,8 @@
+---
+
+# Vagrant version to download. See
+# https://www.vagrantup.com/downloads.html
+vagrant_version: "1.7.4"
+
+vagrant_boxes:
+  - "ubuntu/trusty64"

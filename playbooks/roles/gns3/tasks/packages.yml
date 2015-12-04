@@ -13,6 +13,8 @@
     update_cache: no
     state: present
   with_items:
+    # Juniper vMX
+    # See http://www.juniper.net/techpubs/en_US/vmx15.1/topics/reference/general/vmx-hw-sw-minimums.html
     - bridge-utils
     - qemu-kvm
     - libvirt-bin
@@ -33,8 +35,12 @@
     - python-dev
     - libxml2-dev
     - libxslt-dev
-    # Accesorios para configurar vmx
-    - python-jinja2
+    # LXDE "headless", usando el framebuffer
+    # http://superuser.com/questions/524811
+    - xvfb
+    - lightdm
+    - lxde
+    - x11vnc
 
 - name: Add ansible user to libvirtd group
   become: yes
