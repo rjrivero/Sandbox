@@ -3,4 +3,4 @@
 - name: Main server config
   hosts: server
   roles:
-    - host
+    - vagrant
