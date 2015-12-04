@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: kvm
+    swap_path: /swapfile
+    swap_megas: 16384

@@ -1,0 +1,13 @@
+---
+
+- include: packages.yml
+  tags:
+    - packages
+
+- include: swap.yml
+  tags:
+    - swap
+
+- include: hugepages.yml
+  tags:
+    - hugepages

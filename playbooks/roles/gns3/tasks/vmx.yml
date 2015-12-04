@@ -1,10 +1,5 @@
 ---
 
-- name: Set vMX version names
-  set_fact:
-    vmx_version:  "15.1F3.11"
-    vfpc_version: "20151017"
-
 - name: Create vMX directory
   become: yes
   file:
@@ -21,9 +16,18 @@
     dest: /opt/vmx
     creates: /opt/vmx/vmx-{{ vmx_version }}/
 
-- name: Set vmx.conf
+- name: Remove original config samples
+  file:
+    dest: "/opt/vmx/vmx-{{ vmx_version }}/config/{{ item }}"
+    state: absent
+  with_items:
+    - vmx.conf
+    - vmx-junosdev.conf
+
+- name: Add vMX instances configuration
   template:
     src: templates/vmx.conf
-    dest: /opt/vmx/vmx-{{ vmx_version }}/config/vmx.conf
+    dest: "/opt/vmx/vmx-{{ vmx_version }}/config/vmx-{{ item.name }}.conf"
     mode: 0644
+  with_items: vmx_instances
 

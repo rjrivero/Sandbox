@@ -1,0 +1,13 @@
+---
+
+- include: packages.yml
+  tags:
+    - packages
+
+- include: vagrant.yml
+  tags:
+    - vagrant
+
+- include: vmx.yml
+  tags:
+    - vmx

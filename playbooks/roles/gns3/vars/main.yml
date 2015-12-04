@@ -1,0 +1,36 @@
+---
+
+# Version de VMX descargada
+vmx_version:  "15.1F3.11"
+vfpc_version: "20151017"
+
+# Instancias VMX
+vmx_instances:
+
+  - name: vMX1
+    vcp_port: 8611
+    vfp_port: 8612
+    vcp_ip: 192.168.199.11
+    vfp_ip: 192.168.199.12
+    # Utilizo el cuarfto byte de las MACs como identificador del host
+    vcp_mac: 0a:00:dd:01:01:01
+    vfp_mac: 0a:00:dd:01:01:02
+    interfaces:
+      - 0a:00:dd:01:00:00
+      - 0a:00:dd:01:00:01
+      - 0a:00:dd:01:00:02
+      - 0a:00:dd:01:00:03
+    
+  - name: vMX2
+    vcp_port: 8621
+    vfp_port: 8622
+    vcp_ip: 192.168.199.21
+    vfp_ip: 192.168.199.22
+    vcp_mac: 0a:00:dd:02:01:01
+    vfp_mac: 0a:00:dd:02:01:02
+    interfaces:
+      - 0a:00:dd:02:00:00
+      - 0a:00:dd:02:00:01
+      - 0a:00:dd:02:00:02
+      - 0a:00:dd:02:00:03
+ 

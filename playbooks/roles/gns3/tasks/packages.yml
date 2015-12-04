@@ -1,9 +1,10 @@
 ---
 
-- name: Update cache
-  become: yes
-  apt:
-    update_cache: yes
+# Already updated by kvm depemndency
+#- name: Update cache
+#  become: yes
+#  apt:
+#    update_cache: yes
 
 - name: Install dependencies
   become: yes
@@ -32,6 +33,8 @@
     - python-dev
     - libxml2-dev
     - libxslt-dev
+    # Accesorios para configurar vmx
+    - python-jinja2
 
 - name: Add ansible user to libvirtd group
   become: yes
@@ -39,3 +42,4 @@
     name: "{{ ansible_ssh_user }}"
     groups: libvirtd
     append: true
+

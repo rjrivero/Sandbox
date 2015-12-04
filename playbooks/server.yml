@@ -1,26 +1,6 @@
 ---
 
-- hosts: server
-
-  tasks:
-
-    - include: tasks/host-packages.yml
-      tags:
-        - packages
-
-    - include: tasks/hugepages.yml
-      tags:
-        - hugepages
-
-    - include: tasks/host-vmx.yml
-      tags:
-        - vmx
-
-    - include: tasks/host-vagrant.yml
-      tags:
-        - vagrant
-
-  handlers:
-
-    - include: handlers/host-main.yml
-      tags: always
+- name: Main server config
+  hosts: server
+  roles:
+    - host

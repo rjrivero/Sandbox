@@ -1,0 +1,6 @@
+---
+
+- name: Provision GNS3 server
+  hosts: gns3
+  roles:
+    - gns3

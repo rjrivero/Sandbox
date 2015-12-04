@@ -1,24 +1,23 @@
 ---
 
-- name: Update cache
-  become: yes
-  apt:
-    update_cache: yes
+# Already updated by KVM role
+#- name: Update cache
+#  become: yes
+#  apt:
+#    update_cache: yes
 
-- name: Install kvm dependencies
+- name: Install host dependencies
   become: yes
   apt:
     name: "{{ item }}"
     update_cache: no
     state: present
   with_items:
-    - python-libvirt
-    - libvirt-bin
-    - libvirt-dev
-    - qemu-kvm
     # vMX
     - linux-firmware
     - cpu-checker
+    - python-netifaces
+    - python-jinja2
     # Vagrant KVM
     - libxslt-dev
     - libxml2-dev

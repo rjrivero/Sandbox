@@ -1,5 +1,11 @@
 ---
 
+- name: Add .vimrc config file
+  copy:
+    src: files/vimrc
+    dest: "{{ ansible_env.HOME }}/.vimrc"
+    mode: 0644
+
 - name: Create vmx config dir
   become: yes
   file:
@@ -25,3 +31,4 @@
 - name: Start vMX_mgmt network
   command: virsh net-start vMX_mgmt
   ignore_errors: true
+
