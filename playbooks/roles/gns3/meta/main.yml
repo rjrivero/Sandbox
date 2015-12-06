@@ -3,3 +3,10 @@ dependencies:
   - role: kvm
     swap_path: /swapfile
     swap_megas: 2048
+    # Cuidadito con las huge_pages! el tamaño de memoria
+    # asignado a huge_pages (huge_pages * 2MB) debe ser menor que
+    # el total disponible. si no, el equipo no arranca porque
+    # "init" se queda sin memoria.
+    # Aqui contamos con que el equipo tiene 12 GB de RAM, y
+    # reservamos para hugepages (10 * 1024MB)/2 = 5120 paginas.
+    huge_pages: 5120

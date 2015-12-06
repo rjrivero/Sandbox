@@ -1,9 +1,18 @@
 ---
 
+- name: Set default facts
+  set_fact:
+    kvm_hugepages: 0
+
+- name: Check wether HugePages are allocated or not
+  when: huge_pages > 0
+  set_fact:
+    kvm_hugepages: 1
+
 - name: Enable kernel hugepages
   become: yes
-  copy:
-    src: files/90-hugepages.conf
+  template:
+    src: templates/90-hugepages.conf
     dest: /etc/sysctl.d
     owner: root
     mode: 0644
@@ -17,7 +26,7 @@
   lineinfile:
     dest: /etc/default/qemu-kvm
     regexp: ^KVM_HUGEPAGES
-    line: KVM_HUGEPAGES=1
+    line: "KVM_HUGEPAGES={{ kvm_hugepages }}"
   register: hugepages
 
 - name: Restart libvirt service if Hugepages modified
@@ -26,3 +35,4 @@
   service:
     name: libvirt-bin
     state: restarted
+
