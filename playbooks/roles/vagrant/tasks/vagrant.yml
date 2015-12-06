@@ -27,12 +27,11 @@
 
 - name: Download required boxes
   command: "vagrant box add {{ item }}"
-  register: download_status
   ignore_errors: true
   with_items: vagrant_boxes
 
 - name: Mutate downloaded boxes to libvirt
-  when: item.changed and not item.failed
-  command: "vagrant mutate {{ item.item }} libvirt"
-  with_items: download_status.results
+  command: "vagrant mutate {{ item }} libvirt"
+  ignore_errors: true
+  with_items: vagrant_boxes
 
