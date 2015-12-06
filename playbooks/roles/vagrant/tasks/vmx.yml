@@ -4,8 +4,8 @@
   become: yes
   file:
     dest: /opt/vmx
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
     mode: 0755
     state: directory
    

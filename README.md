@@ -24,7 +24,7 @@ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 ```
 sudo apt-get update
-sudo apt-get install virtualenv python-dev build-essentials
+sudo apt-get install git python-virtualenv python-dev build-essential
 ```
 
   - Crear el virtualenv e instalar ansible
@@ -40,7 +40,7 @@ git clone git://github.com/ansible/ansible.git --recursive
   - En el mismo directorio, descargar el repo e iniciar el entorno
 
 ```
-git clone https://bitbucket.org/five_corp/labinfra.git inventory
+git clone https://github.com/rjrivero/Sandbox inventory
 source inventory/init.sh -U
 ```
 
