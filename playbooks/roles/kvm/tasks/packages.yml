@@ -20,3 +20,11 @@
     - libvirt-bin
     - libvirt-dev
     - qemu-kvm
+
+- name: Add ansible user to kvm group
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: kvm
+    append: yes
+

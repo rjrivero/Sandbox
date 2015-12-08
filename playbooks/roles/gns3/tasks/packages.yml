@@ -42,6 +42,10 @@
     # X2go server, es una solucion con menos latencia que Guacamole.
     - x2goserver
     - x2goserver-xsession
+    # GNS3
+    - dynamips
+    - vpcs
+    - gns3
 
 - name: Add ansible user to libvirtd group
   become: yes
