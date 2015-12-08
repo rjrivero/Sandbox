@@ -6,7 +6,7 @@ Este rol instala el paquete vagrant de https://www.vagrantup.com/. Junto con vag
   - [vagrant-libvirt](https://github.com/pradels/vagrant-libvirt), para poder ejecutar maquinas virtuales con KVM en lugar de VirtualBox.
   - [vagrant-mutate](https://github.com/sciurus/vagrant-mutate), para convertir boxes de VirtualBox a formato KVM.
 
-Además, crea una red de administración **vMX_mgmt** para las interfaces de gestión fuera de banda de los routers virtuales del [servicio gns3](../gns3/README.md). Tengo que hacero aqui, no puedo hacerlo en el propio rol **gns3** porque ese rol solo se ejecuta dentro de la maquina vagrant.
+Además, crea una red de administración **vMX_mgmt** para poder compartir un espacio de direcciones entre libvirt y docker. Los contenedores Docker usaran esta red como red interna, y las maquinas creadas con libvirt podran tener una interfaz en esta red para comunicarse con los contenedores.
 
 Configuracion
 -------------
@@ -18,8 +18,8 @@ La versión de vagrant que se instala es la que se especifique en el fichero [va
 Etiquetas
 ---------
 
-El módulo utiliza dos etiquetas:
+El módulo utiliza las siguientes etiquetas:
 
   - **packages**: para las tareas de instalación de paquetes del sistema operativo.
-  - **vagrant**: para la instalación de vagrant y sus plugins.a
-  - **vmx**: Crea la red virtual de gestión fuera de banda para los routers del [servicio gns3](../gns3/README.md)
+  - **vagrant**: para la instalación de vagrant y sus plugins.
+  - **network**: Crea la red virtual de gestión fuera de banda para la integración con docker.

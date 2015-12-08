@@ -8,6 +8,6 @@
   tags:
     - vagrant
 
-- include: vmx.yml
+- include: network.yml
   tags:
-    - vmx
+    - network

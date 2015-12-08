@@ -1,6 +1,6 @@
 ---
 
-- name: Create vmx config dir
+- name: Create management network config dir
   become: yes
   file:
     dest: /opt/vmx
@@ -9,7 +9,7 @@
     mode: 0755
     state: directory
    
-- name: Publish vmx mgmt network
+- name: Publish mgmt network
   copy:
     src: files/vmx_mgmt.xml
     dest: /opt/vmx/vmx_mgmt.xml
