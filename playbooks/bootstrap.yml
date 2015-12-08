@@ -3,4 +3,9 @@
 - name: Main server config
   hosts: server
   roles:
+    # Vagrant va primero porque hereda de KVM, que actualiza
+    # la cache de paquetes.
     - vagrant
+    - docker
+    # Sobre internet VNC va muy lento, dejamos solo x2go
+    # - guacamole

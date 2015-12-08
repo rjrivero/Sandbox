@@ -1,0 +1,9 @@
+<configs>
+    <!-- Servidor GNS3 creado por el rol "gns3" -->
+    <config name="GNS3" protocol="vnc">
+        <param name="hostname" value="192.168.199.10" />
+	<param name="port" value="5900" />
+	<!-- los passwords VNC no pueden ser de mas de 8 caracteres -->
+	<param name="password" value="{{ vnc_password[:8] }}" />
+    </config>
+</configs>

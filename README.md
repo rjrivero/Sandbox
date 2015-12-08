@@ -55,6 +55,9 @@ Servicios
 
 Los servicios que están actualmente integrados en este playbook son
 
-  - Servidor [vagrant](https://www.vagrantup.com/). El playbook *bootstrap.yml* configura al equipo como un servidor Vagrant con el proveedor [libvirt](https://github.com/pradels/vagrant-libvirt). Este servicio está compuesto por [el rol vagrant](playbooks/roles/vagrant/README.md).
+  - Servidor [vagrant](https://www.vagrantup.com/). El playbook *bootstrap.yml* configura al equipo como un servidor Vagrant con el proveedor [libvirt](https://github.com/pradels/vagrant-libvirt). Este servicio está compuesto por los roles:
+
+    - [Vagrant](playbooks/roles/vagrant/README.md).
+    - [Docker](playbooks/roles/docker/README.md).
 
   - Servidor GNS3. Este servicio está compuesto por [el rol gns3](playbooks/roles/gns3/README.md) y [un Vagrantfile](vagrant/gns3/README.md).

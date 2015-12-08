@@ -1,0 +1,29 @@
+---
+
+# ----------------------------------------------
+# Configura VNC sobre LXDE y un servidor framebuffer
+# ----------------------------------------------
+
+- name: Variables de entorno
+  set_fact:
+    vnc_password: "{{ lookup('env', 'VNC_PASSWORD') }}"
+
+- name: Crea el directorio .vnc, si no existe
+  file:
+    dest: "{{ ansible_env.HOME }}/.vnc"
+    mode: 0755
+    state: directory
+
+- name: Guarda los ficheros de config de vnc4server en el directorio
+  copy:
+    src: "files/{{ item.dest }}"
+    dest: "{{ ansible_env.HOME }}/.vnc/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - dest: xstartup
+      mode: "u=rwx,g=rx,o=rx"
+
+- name: Establece el password VNC
+  command: echo -e "{{ vnc_password }}\n{{ vnc_password }}" | vncpasswd
+  args:
+    chdir: "{{ ansible_env.HOME }}"

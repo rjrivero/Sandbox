@@ -41,6 +41,10 @@ Vagrant.configure("2") do |config|
       :libvirt__adapter => 1,
       :libvirt__network_name => 'vMX_mgmt'
      
+    # Forward port 10000 to port 22 in the VM
+    machine.vm.network "forwarded_port", guest: 22, host: 10000,
+      protocol: 'tcp', gateway_ports: true, host_ip: '*'
+
     # Cambio de enfoque: en vez de una maquina por cada instancia vMX,
     # Vamos a poner todas las instancias en un solo servidor GNS3.
     # With several private NICs

@@ -1,0 +1,48 @@
+---
+
+- name: Add docker apt key
+  become: yes
+  apt_key:
+    keyserver: p80.pool.sks-keyservers.net
+    state: present
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Add docker apt repository from trusty
+  become: yes
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
+    state: present
+    update_cache: yes
+
+- name: Install docker
+  become: yes
+  apt:
+    update_cache: no
+    name: "{{ item }}"
+  with_items:
+    - docker-engine
+
+- name: Install docker python packages
+  become: yes
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker-py
+
+- name: Add vagrant user to docker group
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: yes
+
+# USamos la red de gestion que hemos definido en el rol "vagrant"
+- name: Make docker use existing libvirt bridge
+  become: yes
+  lineinfile:
+    dest: "/etc/default/docker"
+    line: DOCKER_OPTS="-b=virbr100"
+    regexp: ^DOCKER_OPTS
+  notify: Restart docker
+

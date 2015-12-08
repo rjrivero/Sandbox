@@ -6,8 +6,9 @@ Este rol instala los paquetes de QEMU-KVM, habilita el soporte de HugePages, y c
 Configuración
 -------------
 
-El rol acepta dos paŕametros:
+El rol acepta los siguientes paŕametros:
 
-  - swap_path: Ruta al fichero de swap.
   - swap_megas: Megabytes a provisionar para swap (por ejemplo, 8192 = 8 Gigas)
+  - swap_path: Ruta al fichero de swap.
+  - apt_repos: (opcional): lista de repositorios apt a añadir antes de actualizar la cache de apt.
 

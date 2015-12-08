@@ -6,7 +6,7 @@
 #  apt:
 #    update_cache: yes
 
-- name: Install dependencies
+- name: Install packages
   become: yes
   apt:
     name: "{{ item }}"
@@ -35,12 +35,13 @@
     - python-dev
     - libxml2-dev
     - libxslt-dev
-    # LXDE "headless", usando el framebuffer
-    # http://superuser.com/questions/524811
-    - xvfb
-    - lightdm
+    # vMX requiere vnc4server, no puedo usar mi combo favorito
+    # xvfb + x11vnc... lo que si uso es lxde y su display manager lxdm
     - lxde
-    - x11vnc
+    - lxdm
+    # X2go server, es una solucion con menos latencia que Guacamole.
+    - x2goserver
+    - x2goserver-xsession
 
 - name: Add ansible user to libvirtd group
   become: yes

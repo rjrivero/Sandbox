@@ -1,0 +1,45 @@
+---
+
+- name: Get VNC password
+  set_fact:
+    vnc_password: "{{ lookup('env', 'VNC_PASSWORD') }}"
+
+- name: Create Guacamole config dir
+  become: yes
+  file:
+    dest: "/opt/guacamole"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0755
+
+- name: Upload guacamole config files
+  copy:
+    src: "files/{{ item }}"
+    dest: "/opt/guacamole/{{ item }}"
+    mode: 0644
+  with_items:
+    - guacamole.properties
+
+- name: Upload guacamole templates
+  template:
+    src: "templates/{{ item }}"
+    dest: "/opt/guacamole/{{ item }}"
+    mode: 0644
+  with_items:
+    - noauth-config.xml
+    - user-mappings.xml
+
+# https://github.com/hall757/guacamole
+- name: Install docker guacamole image
+  docker:
+    name: guacamole
+    image: hall/guacamole
+    state: started
+    expose:
+      - 8080
+    volumes:
+      - "/opt/guacamole:/etc/guacamole"
+    ports:
+      - "8080:8080"
+

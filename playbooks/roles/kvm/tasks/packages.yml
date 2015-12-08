@@ -1,5 +1,9 @@
 ---
 
+- name: Add Repositories if apt_repos is defined
+  when: apt_repos is defined
+  include: repos.yml
+
 - name: Update cache
   become: yes
   apt:

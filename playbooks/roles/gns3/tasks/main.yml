@@ -4,6 +4,15 @@
   tags:
     - packages
 
+- include: x2go.yml
+  tags:
+    - x2go
+
+# VNC va muy lento sobre internet, lo quitamos
+#- include: vnc.yml
+#  tags:
+#    - vnc
+
 - include: vmx.yml
   tags:
     - vmx

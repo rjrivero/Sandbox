@@ -3,14 +3,14 @@ Rol GNS3
 
 Este rol provisiona una maquina virtual creada mediante vagrant, instalando:
 
+  - [X2Go](http://wiki.x2go.org/doku.php)
   - [GNS3](http://www.gns3.com/)
-  - [X11vnc](http://www.karlrunge.com/x11vnc/)
   - [Juniper vMX](http://www.juniper.net/techpubs/en_US/vmx15.1/topics/concept/vmx-overview.html)
 
 La configuración del hardware virtual (número de vCPUs, memoria, interfaces de red, etc) está el Vagrantfile de [vagrant/gns3](../../../vagrant/gns3/README.md). Este playbook se encarga de:
 
   - Instalar los paquetes necesarios.
-  - Configurar VNC y publicarlo en un puerto del host.
+  - Configurar X2Go y configurar las claves publicas
   - Configurar una topología vMX.
 
 Preparación
@@ -36,7 +36,20 @@ Configuración
 
 El espacio de swap en el servidor virtual GNS3 se configura en el fichero [meta/main.yml](meta/main.yml), a través de la herencia con el rol [KVM](../kvm/README.md).
 
-El resto de configuraciones se hacen a través del fichero [vars/main.yml](vars/main.yml). La configuración de las versiones de software de vMX y vFC es obligatoria.
+El puerto en el que escucha X2Go se configura en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile), con port_forwarding. Por defecto, es el 10000.
+
+El resto de configuraciones se hacen a través del fichero [vars/main.yml](vars/main.yml):
+
+  - Versiones de software de vMX y vFC (obligatoria).
+  - Definición de instancias de vMX (nombres, interfaces, MACs...)
+  - Enlaces entre instancias vMX
+
+El script copia las claves públicas autorizadas (*~/.ssh/authorized_keys*) del host al guest, asi que para poder iniciar sesion en la maquina GNS3 con X2Go, basta con añadir la clave publica ssh del cliente al fichero authorized_keys del host, y reprovisionar.
+
+```
+echo <CLAVE_PUBLICA_SSH> >> ~/.ssh/authorized_keys
+vagrant provision
+```
 
 Consumo de recursos
 -------------------
@@ -48,8 +61,7 @@ El tamaño de memoria y número de vCPUs asignado a cada instancia de vMX se con
 Gestion
 -------
 
-Para poder acceder el entorno de laboratorio desde el servidor (host), el [rol vagrant](../vagrant/README.md) crea una interfaz de red **vMX_mgmt**, a la que se conectan todas las interfaces de gestión fuera de banda de todos los routers. De esta forma, se puede acceder
-a los routers:
+Para poder acceder el entorno de laboratorio desde el servidor (host), el [rol vagrant](../vagrant/README.md) crea una interfaz de red **vMX_mgmt**, a la que se conectan todas las interfaces de gestión fuera de banda de todos los routers. De esta forma, se puede acceder a los routers:
 
   - Desde el host (fuera de la maquina vagrant), a través de la interfaz vMX_mgmt (**192.168.199.1**)
   - Desde el guest (creado por Vagrant), a través de la interfaz eth1 (**192.168.199.10**)
@@ -63,6 +75,7 @@ El playbook utiliza las siguientes etiquetas:
 
   - **packages**: Para la instalación de los paquetes del sistema operativo.
   - **vmx**: Para la instalación y configuración de vmx
+  - **x2go**: Para la instalación y configuración de X2Go
 
 Arranque de las máquinas
 ------------------------

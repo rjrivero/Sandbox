@@ -1,0 +1,9 @@
+---
+
+- name: Add Repositories
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: no
+  with_items: "{{ apt_repos }}"
