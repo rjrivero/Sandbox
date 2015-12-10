@@ -37,6 +37,12 @@
     dest: "/opt/vmx/vmx-{{ vmx_version }}/config/vmx-junosdev.conf"
     mode: 0644
 
+- name: Add vMX install script
+  template:
+    src: templates/vmx-install.sh
+    dest: "/opt/vmx/vmx-{{ vmx_version }}/vmx-install.sh"
+    mode: 0755
+
 # Prefiero instalarlos manualmente, porque tardan un web...
 #- name: Launch vMX instances
 #  become: yes

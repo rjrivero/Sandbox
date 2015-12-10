@@ -4,7 +4,7 @@
   set_fact:
     kvm_hugepages: 0
 
-- name: Check wether HugePages are allocated or not
+- name: Check if HugePages are allocated or not
   when: huge_pages > 0
   set_fact:
     kvm_hugepages: 1
@@ -36,3 +36,22 @@
     name: libvirt-bin
     state: restarted
 
+- name: create /HugePage_vPFE mountpoint (for vMX)
+  become: yes
+  when: kvm_hugepages
+  file:
+    dest: /HugePage_vPFE
+    mode: 0755
+    state: directory
+
+- name: Bind mount HugePages FS to /HugePage_vPFE (for vMX)
+  become: yes
+  when: kvm_hugepages
+  mount:
+    name: /HugePage_vPFE
+    src:  /run/hugepages/kvm
+    fstype: none
+    opts: bind
+    passno: "0"
+    dump: "0"
+    state: mounted

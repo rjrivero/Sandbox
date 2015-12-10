@@ -36,7 +36,7 @@ Configuración
 
 El espacio de swap en el servidor virtual GNS3 se configura en el fichero [meta/main.yml](meta/main.yml), a través de la herencia con el rol [KVM](../kvm/README.md).
 
-El puerto en el que escucha X2Go se configura en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile), con port_forwarding. Por defecto, es el 10000.
+El puerto en el que escucha X2Go se configura en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile), con port_forwarding. Por defecto, es el 3389.
 
 El resto de configuraciones se hacen a través del fichero [vars/main.yml](vars/main.yml):
 
