@@ -8,7 +8,10 @@ dependencies:
     # el total disponible. si no, el equipo no arranca porque
     # "init" se queda sin memoria.
     # Aqui contamos con que el equipo tiene 12 GB de RAM, y
-    # reservamos para hugepages (10 * 1024MB)/2 = 5120 paginas.
-    huge_pages: 5120
+    # reservamos para hugepages (4 * 1024MB)/2 = 2048 paginas.
+    # De las dos maquinas virtuales del vMX (vcp y vfp), solo el forwarding
+    # plane usa HugePages. Como cada maquina vfp la estoy configurando con
+    # 512 MB, con 4 gigas tengo ya para 6-7 maquinas, mas que suficiente.
+    huge_pages: 2048
     apt_repos:
       - ppa:x2go/stable

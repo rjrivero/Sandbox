@@ -1,8 +1,8 @@
 ---
 
 # Version de VMX descargada
-vmx_version:  "15.1F3.11"
-vfpc_version: "20151017"
+vmx_version:  "14.1R6.4"
+vfpc_version: "20151026"
 
 # Instancias VMX
 vmx_instances:

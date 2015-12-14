@@ -44,6 +44,18 @@
     mode: 0755
     state: directory
 
+- name: Mount HugePages FS to default QEMU location
+  become: yes
+  when: kvm_hugepages
+  mount:
+    name: /run/hugepages/kvm
+    src: hugetlbfs-kvm
+    fstype: hugetlbfs
+    opts: rw
+    passno: "0"
+    dump: "0"
+    state: mounted
+
 - name: Bind mount HugePages FS to /HugePage_vPFE (for vMX)
   become: yes
   when: kvm_hugepages
