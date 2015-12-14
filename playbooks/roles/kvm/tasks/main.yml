@@ -11,3 +11,8 @@
 - include: hugepages.yml
   tags:
     - hugepages
+
+- include: lvm.yml
+  when: crypt_device is defined
+  tags:
+    - lvm

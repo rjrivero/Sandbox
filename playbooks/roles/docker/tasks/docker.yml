@@ -1,5 +1,42 @@
 ---
 
+# Si estamos cifrando, montar /var/lib/docker en un volumen
+- name: Check docker LVM
+  become: yes
+  when: (crypt_device is defined) and (docker_lvm_size is defined)
+  lvol:
+    lv: docker
+    size: "{{ docker_lvm_size }}"
+    state: present
+    vg: tank
+
+- name: Check LVM filesystem
+  become: yes
+  when: (crypt_device is defined) and (docker_lvm_size is defined)
+  filesystem:
+    dev: /dev/mapper/tank-docker
+    fstype: ext4
+
+- name: Check docker mountpoint exists
+  become: yes
+  when: (crypt_device is defined) and (docker_lvm_size is defined)
+  file:
+    dest: /var/lib/docker
+    state: directory
+    mode: 0755
+
+- name: Mount filesystem to /var/lib/docker
+  become: yes
+  when: (crypt_device is defined) and (docker_lvm_size is defined)
+  mount:
+    name: /var/lib/docker
+    src:  /dev/mapper/tank-docker
+    opts: defaults,noauto
+    passno: "0"
+    dump:   "0"
+    state: mounted
+    fstype: ext4
+
 - name: Add docker apt key
   become: yes
   apt_key:
@@ -37,7 +74,7 @@
     groups: docker
     append: yes
 
-# USamos la red de gestion que hemos definido en el rol "vagrant"
+# Usamos la red de gestion que hemos definido en el rol "vagrant"
 - name: Make docker use existing libvirt bridge
   become: yes
   lineinfile:
@@ -46,9 +83,18 @@
     regexp: ^DOCKER_OPTS
   notify: Restart docker
 
-- name: Make docker service active
+# Hacer el servicio activo por defecto, si no estamos cifrando
+- name: Start docker service
+  become: yes
+  service:
+    name: docker
+    enabled: no
+    state: started
+
+# Hacer el servicio persistente al arranque, si no esta,os cifrando
+- name: Make docker service enabled on boot
+  when: crypt_device is not defined
   become: yes
   service:
     name: docker
     enabled: yes
-    state: started

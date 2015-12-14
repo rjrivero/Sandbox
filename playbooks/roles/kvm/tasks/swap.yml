@@ -43,7 +43,9 @@
     name: "{{ final_swap_device }}"
     backing_device: "{{ swap_path }}"
     password: "/dev/urandom"
-    opts: "swap,cipher=aes-cbc-essiv:sha256,size=256"
+    # Recommended for Luks 1.6 onward, see
+    # https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#Encryption_options_for_LUKS_mode
+    opts: "swap,cipher=aes-xts-plain64:sha512,size=512"
     state: present
 
 - name: Write swap entry in fstab

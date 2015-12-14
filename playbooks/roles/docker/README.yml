@@ -1,0 +1,10 @@
+Rol servidor docker
+===================
+
+Rol que activa docker en el servidor. Lo más destacable es que, si la variable **crypt_device** está definida, se asegura de que existe un LVM llamado **docker**, que monta en */var/lib/docker*.
+
+El tamaño del volumen se puede configurar con la variable **docker_lvm_size**, por ejemplo:
+        
+  - **2048M** 2048 megas
+  - **64G** 64 gigas
+  - **25%FREE** 25% del espacio libre del VG.

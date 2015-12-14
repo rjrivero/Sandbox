@@ -1,0 +1,16 @@
+---
+
+- name: Install lvm2, if needed
+  become: yes
+  apt:
+    name: lvm2
+    update_cache: no
+    state: present
+
+
+- name: Create VG **tank** from cipher device, if defined
+  become: yes
+  lvg:
+    pvs: "/dev/mapper/{{ crypt_device }}"
+    state: present
+    vg: tank

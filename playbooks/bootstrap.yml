@@ -2,9 +2,22 @@
 
 - name: Main server config
   hosts: server
+  vars:
+    swap_path: /swapfile
+    swap_megas: 16384
+    swap_crypt: true
+    # En el host no reservo hugepages. Tampoco tengo tanta memoria
+    # como para que sea un problema, y como el proveedor vagrant-libvirt
+    # de momento no me deja activar HugePages en la configuracion de la
+    # maquina, tampoco iba a usarlas.
+    huge_pages: 0
+    # El dispositivo dm-crypt tiene que estar descifrado antes de
+    # ejecutar el playbook.
+    # cryptsetup open <ruta al dispositivo> tank
+    crypt_device: tank
+    docker_lvm_size: 128G
   roles:
-    # Vagrant va primero porque hereda de KVM, que actualiza
-    # la cache de paquetes.
+    - kvm
     - vagrant
     - docker
     # Sobre internet VNC va muy lento, dejamos solo x2go
