@@ -46,3 +46,9 @@
     regexp: ^DOCKER_OPTS
   notify: Restart docker
 
+- name: Make docker service active
+  become: yes
+  service:
+    name: docker
+    enabled: yes
+    state: started

@@ -1,5 +1,17 @@
 ---
 
+- name: Set default facts
+  set_fact:
+    final_swap_crypt: (swap_crypt is defined) and swap_crypt
+    final_swap_device: "{{ swap_path }}"
+    final_swap_path:   "{{ swap_path }}"
+
+- name: Check if swap must be encrypted
+  when: final_swap_crypt
+  set_fact:
+    final_swap_device: "cryptswap"
+    final_swap_path:   "/dev/mapper/cryptswap"
+
 - name: Create swap file
   become: yes
   command: dd if=/dev/zero of={{ swap_path }} bs=1M count={{ swap_megas }}
@@ -15,27 +27,44 @@
     mode: 0600
 
 - name: Check swap file type
+  when: not final_swap_crypt
   command: "file {{ swap_path }}"
   register: swapfile
 
 - name: Make swap file
+  when: (not final_swap_crypt) and (swapfile.stdout.find('swap file') == -1)
   become: yes
   command: "mkswap {{ swap_path }}"
-  when: swapfile.stdout.find('swap file') == -1
+
+- name: If swap is encrypted, create crypttab entry
+  become: yes
+  when: final_swap_crypt
+  crypttab:
+    name: "{{ final_swap_device }}"
+    backing_device: "{{ swap_path }}"
+    password: "/dev/urandom"
+    opts: "swap,cipher=aes-cbc-essiv:sha256,size=256"
+    state: present
 
 - name: Write swap entry in fstab
   become: yes
   mount:
     name: none
-    src: "{{ swap_path }}"
+    src: "{{ final_swap_path }}"
     fstype: swap
     opts: sw
     passno: "0"
     dump: "0"
     state: present
 
+- name: If encrypted swap, start it
+  become: yes
+  when: final_swap_crypt
+  command: "cryptdisks_start {{ final_swap_device }}"
+  ignore_errors: true
+
 - name: Mount swap
   become: yes
-  command: "swapon {{ swap_path }}"
+  command: "swapon {{ final_swap_path }}"
   when: ansible_swaptotal_mb < 1
 
