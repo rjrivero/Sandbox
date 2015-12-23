@@ -1,0 +1,8 @@
+---
+
+esxi_memory_gb: 8
+esxi_vcpus: 2
+esxi_image_path: /opt/esxi/image
+esxi_ds_path: /opt/esxi/ds
+esxi_network: vMX_mgmt
+esxi_listen_address: 0.0.0.0

@@ -1,0 +1,27 @@
+---
+
+- name: Enable KVM parameters for nesting
+  become: yes
+  lineinfile:
+    dest: "/etc/modprobe.d/{{ item.file }}"
+    line: "{{ item.line }}=y"
+    regexp: "^{{ item.line }}"
+    state: present
+    create: yes
+    mode: 0644
+  with_items:
+    - file: "kvm.conf"
+      line: "options kvm ignore_msrs"
+    - file: "kvm_intel.conf"
+      line: "options kvm_intel nested"
+    - file: "kvm_intel.conf"
+      line: "options kvm_intel ept"
+
+# No es suficiente esto! hay que reiniciar
+- name: Enable required KVM parameters in runtime
+  become: yes
+  command: "echo y > {{ item }}"
+  with_items:
+    - /sys/module/kvm_intel/parameters/nested
+    - /sys/module/kvm_intel/parameters/ept
+    - /sys/module/kvm/parameters/ignore_msrs

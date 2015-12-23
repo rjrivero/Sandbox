@@ -11,6 +11,8 @@
     # de momento no me deja activar HugePages en la configuracion de la
     # maquina, tampoco iba a usarlas.
     huge_pages: 0
+    apt_repos:
+      - ppa:jacob/virtualisation
     # El dispositivo dm-crypt tiene que estar descifrado antes de
     # ejecutar el playbook.
     # cryptsetup open <ruta al dispositivo> tank
@@ -20,5 +22,6 @@
     - kvm
     - vagrant
     - docker
+    - esxi
     # Sobre internet VNC va muy lento, dejamos solo x2go
     # - guacamole

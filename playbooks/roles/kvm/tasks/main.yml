@@ -8,6 +8,10 @@
   tags:
     - swap
 
+- include: nested.yml
+  tags:
+    - nested
+
 - include: hugepages.yml
   tags:
     - hugepages

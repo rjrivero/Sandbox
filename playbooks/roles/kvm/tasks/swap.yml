@@ -2,7 +2,7 @@
 
 - name: Set default facts
   set_fact:
-    final_swap_crypt: (swap_crypt is defined) and swap_crypt
+    final_swap_crypt:  "{{ (swap_crypt is defined) and swap_crypt }}"
     final_swap_device: "{{ swap_path }}"
     final_swap_path:   "{{ swap_path }}"
 

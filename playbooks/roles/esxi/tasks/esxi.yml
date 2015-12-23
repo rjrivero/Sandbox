@@ -1,0 +1,31 @@
+---
+
+- name: Create ESXi directories
+  become: yes
+  file:
+    dest: "{{ item }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0755
+    state: directory
+  with_items:
+    - "{{ esxi_image_path }}"
+    - "{{ esxi_ds_path }}"
+
+- name: Create ESXi disk image
+#  command: /usr/bin/qemu-img create -f qcow2 -o preallocation=metadata {{ esxi_image_path }}/esxi.img 16G
+  command: /usr/bin/qemu-img create -f raw {{ esxi_image_path }}/esxi.img 16G
+  args:
+    creates: "{{ esxi_image_path }}/esxi.img"
+
+- name: Copy ESXi ISO image
+  copy:
+    src: files/VMware-VMvisor-Installer-6.0.0.update01-3029758.x86_64.iso
+    dest: "{{ esxi_image_path }}/esxi.iso"
+    mode: 0644
+
+- name: Define libvirt ESXi VM
+  virt:
+    name: esxi
+    command: define
+    xml: "{{ lookup('template', 'esxi.xml') }}"

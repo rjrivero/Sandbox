@@ -1,0 +1,17 @@
+---
+
+- name: Install latest qemu packages
+  become: yes
+  apt:
+    update_cache: no
+    name: "{{ item }}"
+    state: latest
+    install_recommends: yes
+  with_items:
+    # Ultima version de qemu y libvirt, del ppa
+    - qemu
+    - libvirt-bin
+    # Ultimo kernel disponible para trusty (LTS Hardware Enablement Stack)
+    # Ver: https://wiki.ubuntu.com/TrustyTahr/ReleaseNotes
+    - linux-generic-lts-vivid 
+    

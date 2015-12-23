@@ -1,0 +1,9 @@
+---
+
+- include: packages.yml
+  tags:
+    - packages
+
+- include: esxi.yml
+  tags:
+    - esxi
