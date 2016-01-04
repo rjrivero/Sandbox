@@ -34,7 +34,7 @@ Una vez descargado el software al directorio *playbooks/roles/gns3/files* y enco
 Configuración
 -------------
 
-El espacio de swap en el servidor virtual GNS3 se configura en el fichero [meta/main.yml](meta/main.yml), a través de la herencia con el rol [KVM](../kvm/README.md).
+El espacio en swap en el servidor virtual GNS3 se configura con los parametros **swap_path**, **swap_megas** y **swap_crypt** del rol [KVM](../kvm/README.md).
 
 El puerto en el que escucha X2Go se configura en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile), con port_forwarding. Por defecto, es el 3389.
 
@@ -54,7 +54,7 @@ vagrant provision
 Consumo de recursos
 -------------------
 
-Este servicio consume bastante memoria. Cada instancia de vMX crea dos máquinas virtuales con 512MB de RAM cada una, por lo que cada router virtual requiere en total algo más de 1GB (contando con el overhead de KVM).
+Este servicio consume bastante memoria. Cada instancia de vMX crea dos máquinas virtuales con 1GB (control Plane) y 6GB (Forwarding Plane) de RAM, por lo que cada router virtual requiere en total algo más de 17GB (contando con el overhead de KVM).
 
 El tamaño de memoria y número de vCPUs asignado a cada instancia de vMX se configura en el fichero [templates/vmx.conf](templates/vmx.conf).
 
@@ -100,12 +100,15 @@ Por cada instancia de vMX definida en el fichero [vars/main.yml](vars/main.yml),
 Para ver como avanza la instalación de una instancia, se puede abrir la consola con el comando
 
 ```
-./vmx.sh --console vpc <nombre de instancia>
+./vmx.sh --console vcp <nombre de instancia> # control plane
+./vmx.sh --console vfp <nombre de instancia> # Forwarding plane
 ```
 
 El login es **root**, sin password. Se entra en modo comando con *cli*, y se pueden ver las interfaces creadas con *show interfaces terse*. Para salir de la consola de una instancia vMX, pulsar Ctrl+] y teclear "quit" cuando se muestre el prompt *telnet>*.
 
-Cada máquina que complete su instalación se puede apagar y volver a encender con *./vmx.sh stop* o *start*.
+La instalacion tarde mucho. Mucho es **MUCHO**, tanto que para que se levanten finalmente las interfaces ge-0/0/X puede tardar **horas**. Asi que paciencia.
+
+Cada máquina que complete su instalación se puede apagar y volver a encender con *./vmx.sh --stop* o *--start*.
 
 Por último, una vez arrancadas todas las máquinas, hay que ejecutar:
 
