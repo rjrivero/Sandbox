@@ -61,12 +61,11 @@ El tamaño de memoria y número de vCPUs asignado a cada instancia de vMX se con
 Gestion
 -------
 
-Para poder acceder el entorno de laboratorio desde el servidor (host), el [rol vagrant](../vagrant/README.md) crea una interfaz de red **vMX_mgmt**, a la que se conectan todas las interfaces de gestión fuera de banda de todos los routers. De esta forma, se puede acceder a los routers:
+Las dos maquinas virtuales que crea el script vmx.sh (la de control y la de forwarding) tienen una direccion IP en el rango de la interfaz eth0 del host. Esto debe ser asi para que el montaje funcione.
 
-  - Desde el host (fuera de la maquina vagrant), a través de la interfaz vMX_mgmt (**192.168.199.1**)
-  - Desde el guest (creado por Vagrant), a través de la interfaz eth1 (**192.168.199.10**)
+Al usar como host una maquina virtual creada con el proveedor de libvirt para Vagrant, la interfaz eth0 se enlaza a una red virtual **vagrant-libvirt** con el direccionamiento por defecto **192.168.121.0/24**. Las direcciones de gestión de las instancia vMX definidas en el fichero [vars/main.yml](vars/main.yml) **deben pertenecer a la misma red 192.168.121.0/24**.
 
-Las direcciones IP de la red de gestión están fijadas manualmente en el fichero [files/net_mgmt.xml del rol vagrant](../vagrant/files/net_mgmt.xml), y en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile), y no son configurables. Las direcciones de gestión de las instancia vMX creadas en el fichero [vars/main.yml](vars/main.yml) **deben pertenecer a la misma red 192.168.199.0/24**.
+Ademáde esa red, cada máina virtual tiene una segunda interfaz **eth1** que pertenece a la red de gestion [vMX_mgmt del rol Vagrant](../vagrant/files/net_mgmt.xml). La direccion de esa interfaz se configura en [el Vagrantfile](../../../vagrant/gns3/Vagrantfile).
 
 Etiquetas
 ---------
@@ -80,13 +79,19 @@ El playbook utiliza las siguientes etiquetas:
 Arranque de las máquinas
 ------------------------
 
-El primer arranque de las instancias de vMX es pesado y lento. Tanto es así que no he querido que los scripts de provisión las arranque, sino que he preferido dejar el proceso manual.
+El primer arranque de las instancias de vMX es pesado y lento. Tanto es así que no he querido que los scripts de provisión las arranque,n sino que he preferido dejar el proceso manual.
 
 Una vez completada la creación de la máquina virtual con Vagrant y su provisión,deberán arrancarse manualmente las instancias de vMX con los comandos:
 
 ```
 # Dentro del directorio vagrant/gns3
-vagrant ssh
+# "vagrant ssh" es "arriesgado" porque al hacer la instalacion de la maquina
+# virtual, el script crea un bridge y mueve la interfaz eth0 a dicho bridge,
+# lo que puede provocar que se pierda la conexion y se interrumpa el script.
+# Por este motivo, se recomienda mejor hacer un SSH a la direccion IP asignada
+# a la interfaz eth1 de la maquina:
+ssh-keygen -f "~/.ssh/known_hosts" -R 192.168.199.10
+ssh -a -l vagrant 192.168.199.10
 
 # Una vez conectado a la máquina virtual
 cd /opt/vmx/vmx*
@@ -97,16 +102,31 @@ El script **vmx.sh** crea la instancia de vMX. El flag *-lv* activa el debug, y 
 
 Por cada instancia de vMX definida en el fichero [vars/main.yml](vars/main.yml), habrá un fichero de configuración vmx-**nombre_de_instancia**.cfg que será necesario ejecutar con *vmx.sh*.
 
-Para ver como avanza la instalación de una instancia, se puede abrir la consola con el comando
+Para ver como avanza la instalación de una instancia, se puede n abrir las consolas del control plane y el forwarding plane respectivamente con los comandos:
 
 ```
 ./vmx.sh --console vcp <nombre de instancia> # control plane
 ./vmx.sh --console vfp <nombre de instancia> # Forwarding plane
 ```
 
-El login es **root**, sin password. Se entra en modo comando con *cli*, y se pueden ver las interfaces creadas con *show interfaces terse*. Para salir de la consola de una instancia vMX, pulsar Ctrl+] y teclear "quit" cuando se muestre el prompt *telnet>*.
+El login del control plane es **root**, sin password. Se entra en modo comando con *cli*. el login del forwarding plane es **root** con password **root**. Para salir de la consola de una instancia vMX, pulsar Ctrl+] y teclear "quit" cuando se muestre el prompt *telnet>*.
 
-La instalacion tarde mucho. Mucho es **MUCHO**, tanto que para que se levanten finalmente las interfaces ge-0/0/X puede tardar **horas**. Asi que paciencia.
+La instalacion tarda mucho. Mucho es **MUCHO**, puede tirarse tranquilamente media hora. Lo mejor es monitorizar el estado desde la vCP, ejecutando ocasionalmente el comando *show chassis 0 fpc detail*, hasta que la placa lleve ya un ratito **online**:
+
+```
+root> show chassis fpc 0 detail
+Slot 0 information:
+  State                                 Online
+  Temperature                        Absent
+  Total CPU DRAM                      0 MB
+  Total RLDRAM                        0 MB
+  Total DDR DRAM                      0 MB
+  Start time:                           2016-01-04 15:55:42 UTC
+  Uptime:                               4 minutes, 16 seconds
+  Max Power Consumption               0 Watts
+```
+
+Cuando la tarjeta haya sido reconocida y este online, es recomendable **reiniciar las dos maquinas virtuales desde sus respectivas consolas**, para que cojan las configuraciones finales y funcione por fin...
 
 Cada máquina que complete su instalación se puede apagar y volver a encender con *./vmx.sh --stop* o *--start*.
 

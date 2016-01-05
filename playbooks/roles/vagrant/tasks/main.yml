@@ -8,6 +8,10 @@
   tags:
     - vagrant
 
+- include: ksm.yml
+  tags:
+    - ksm
+
 - include: network.yml
   tags:
     - network

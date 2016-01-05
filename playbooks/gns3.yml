@@ -3,17 +3,26 @@
 - name: Provision GNS3 server
   hosts: gns3
   vars:
-    swap_path: /swapfile
-    swap_megas: 4096
+    # Este equipo no va a tener swap. Es una maquina virtual, lo que vamos a
+    # hacer es overcommit de memoria (darle mas memoria de la que hay
+    # fisicamente en el host), y dejar que sea el host el que gestione el
+    # swap. Aprovecharemos el soporte de KSM (Kernel Shared Memory) del host
+    # para reducir la necesidad de acudir al swap.
+    # swap_path: /swapfile
+    # swap_megas: 4096
     # Cuidadito con las huge_pages! el tamaño de memoria
     # asignado a huge_pages (huge_pages * 2MB) debe ser menor que
     # el total disponible. si no, el equipo no arranca porque
     # "init" se queda sin memoria.
-    # Aqui contamos con que el equipo tiene 12 GB de RAM, y
-    # reservamos para hugepages (4 * 1024MB)/2 = 2048 paginas.
-    # De las dos maquinas virtuales del vMX (vcp y vfp), solo el forwarding
-    # plane usa HugePages. Como cada maquina vfp la estoy configurando con
-    # 1024 MB, con 4 gigas tengo ya para 2-3 maquinas, habra que valerse.
+    # Cada instancia de vMX usa 1G para el vcp y 6G para el vfp. El host que
+    # estamos usando tiene 16G fisicos. Contamos con KSM para reducir el
+    # consumo de memoria, pero tampoco queremos pasarnos con el overcommit...
+    # Por eso, la maquina virtual va a estar dimensionada para un maximo de
+    # 3 instancias de vMX (3x7 = 21). Asi le asignaremos entre 24G y 32G
+    # de memoria, un overcommit de 1.5:1 o 2:1.
+    # El vcp usa large pages, pero el vfp no. Asi que 3 instancias vMX
+    # usarian 3G de large pages, ponle 4G por contar con un poco de overhead:
+    # (4 * 1024MB)/2 = 2048 paginas.
     huge_pages: 2048
     apt_repos:
       - ppa:x2go/stable

@@ -39,13 +39,15 @@
     # xvfb + x11vnc... lo que si uso es lxde y su display manager lxdm
     - lxde
     - lxdm
-    # X2go server, es una solucion con menos latencia que Guacamole.
+    # X2go server, es una solucion con menos latencia que Guacamole + VNC.
     - x2goserver
     - x2goserver-xsession
     # GNS3
     - dynamips
     - vpcs
     - gns3
+    # Por si quiero instalar vSRX...
+    - virt-manager
 
 - name: Add ansible user to libvirtd group
   become: yes

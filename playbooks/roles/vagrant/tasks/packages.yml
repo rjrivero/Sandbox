@@ -23,3 +23,13 @@
     - libxml2-dev
     - libvirt-dev
     - zlib1g-dev
+    # lm-sensors, para monitorizar la temperatura del equipo
+    - lm-sensors
+
+# Enable kmod service
+- name: Enable kmod service
+  become: yes
+  service:
+    name: kmod
+    enabled: yes
+    state: started

@@ -5,6 +5,7 @@
     - packages
 
 - include: swap.yml
+  when: swap_path is defined
   tags:
     - swap
 

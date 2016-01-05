@@ -1,0 +1,15 @@
+---
+
+# Escaneando 8 paginas de 4K 10 veces por segundo, tenemos 8*10*4*3600 =>
+# aprox 1GByte/hora.
+# Configuro KSM para que sea capaz de escanear hasta 32GB de memoria en lo
+# que tarda en arrancar una instancia de vMX (sobre 1 hora). 
+# 8*32 = 256 paginas cada 100 msec, aprox.
+- name: Actualizar parametros KSM para escanear 32GB / hora
+  become: yes
+  shell: "echo {{ item.value }} > {{ item.path }}"
+  with_items:
+    - path: /sys/kernel/mm/ksm/pages_to_scan
+      value: 250
+    - path: /sys/kernel/mm/ksm/sleep_millisecs
+      value: 100

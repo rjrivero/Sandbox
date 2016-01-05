@@ -4,7 +4,7 @@
   hosts: server
   vars:
     swap_path: /swapfile
-    swap_megas: 16384
+    swap_megas: 24576
     swap_crypt: true
     # En el host no reservo hugepages. Tampoco tengo tanta memoria
     # como para que sea un problema, y como el proveedor vagrant-libvirt

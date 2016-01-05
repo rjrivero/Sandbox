@@ -10,8 +10,12 @@ vmx_instances:
   - name: v11
     vcp_port: 8611
     vfp_port: 8711
-    vcp_ip: 192.168.199.101
-    vfp_ip: 192.168.199.111
+    # Las direcciones de gestion tienen que pertenecer al rango de la
+    # interfaz eth0 del equipo. El proveedor vagrant-libvirt enlaza esa
+    # interfaz a una red particular **libvirt-vagrant** para la que usa
+    # el direccionamiento 192.168.121.0/24 por defecto.
+    vcp_ip: 192.168.121.101
+    vfp_ip: 192.168.121.111
     # Utilizo el cuarto byte de las MACs como identificador del host
     vcp_mac: 0a:00:dd:11:ff:01
     vfp_mac: 0a:00:dd:11:ff:02
@@ -22,8 +26,8 @@ vmx_instances:
   - name: v12
     vcp_port: 8612
     vfp_port: 8712
-    vcp_ip: 192.168.199.102
-    vfp_ip: 192.168.199.112
+    vcp_ip: 192.168.121.102
+    vfp_ip: 192.168.121.112
     vcp_mac: 0a:00:dd:12:ff:01
     vfp_mac: 0a:00:dd:12:ff:02
     interfaces:
