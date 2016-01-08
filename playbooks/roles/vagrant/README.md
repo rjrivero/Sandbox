@@ -22,4 +22,10 @@ El módulo utiliza las siguientes etiquetas:
 
   - **packages**: para las tareas de instalación de paquetes del sistema operativo.
   - **vagrant**: para la instalación de vagrant y sus plugins.
-  - **network**: Crea la red virtual de gestión fuera de banda para la integración con docker.
+  - **network**: Crea la red virtual interna para la integración con docker. 
+
+Para permitir que las instancias creadas con vagrant y los contenedores docker se comuniquen, se usa como bridge para docker una red virtual creada con libvirt.
+
+  - Por motivos historicos, esta red se llama **vMX_mgmt** y tiene el direccionamiento **192.168.199.0/24**.
+  - El [rol docker](../docker/README.yml) configura el sistema para que docker use esta misma red para los contenedores.
+  - De esta forma, las maquinas virtuales y los contenedores pueden comunicarse internamente por esa red.

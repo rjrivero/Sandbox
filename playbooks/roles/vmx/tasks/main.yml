@@ -4,7 +4,7 @@
   tags:
     - packages
 
-- include: x2go.yml
+- include: vmx.yml
   tags:
-    - x2go
+    - vmx
 

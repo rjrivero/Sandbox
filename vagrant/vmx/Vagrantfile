@@ -12,9 +12,9 @@ Vagrant.configure("2") do |config|
   # puppet, chef, ansible, and others. Check the Vagrant website for
   # details.
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "../../playbooks/gns3.yml"
+    ansible.playbook = "../../playbooks/vmx.yml"
     ansible.groups = {
-      "gns3" => ["gns3"]
+      "vmx" => ["vmx"]
     }
   end
 
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/trusty64"
 
   # Here's our VM configuration
-  config.vm.define "gns3" do |machine|
+  config.vm.define "vmx" do |machine|
 
     # Set memory and number of CPUs
     machine.vm.provider :libvirt do |libvirt|
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
 
     # Hostname
     machine.vm.box = "ubuntu/trusty64"
-    machine.vm.hostname = "gns3"
+    machine.vm.hostname = "vmx"
 
     # Create dedicated mgmt network for vMX instances, and link it
     # to dedicated bridge 'vMX_mgmt'
@@ -41,10 +41,6 @@ Vagrant.configure("2") do |config|
       :libvirt__adapter => 1,
       :libvirt__network_name => 'vMX_mgmt'
      
-    # Forward port 3389 to port 22 in the VM
-    machine.vm.network "forwarded_port", guest: 22, host: 3389,
-      protocol: 'tcp', gateway_ports: true, host_ip: '*'
-
     # Cambio de enfoque: en vez de una maquina por cada instancia vMX,
     # Vamos a poner todas las instancias en un solo servidor GNS3.
     # With several private NICs

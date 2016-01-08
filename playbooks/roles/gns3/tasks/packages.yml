@@ -1,6 +1,6 @@
 ---
 
-# Already updated by kvm depemndency
+# Already updated by kvm dependency
 #- name: Update cache
 #  become: yes
 #  apt:
@@ -13,41 +13,15 @@
     update_cache: no
     state: present
   with_items:
-    # Juniper vMX
-    # See http://www.juniper.net/techpubs/en_US/vmx15.1/topics/reference/general/vmx-hw-sw-minimums.html
-    - bridge-utils
-    - qemu-kvm
-    - libvirt-bin
-    - python
-    - python-netifaces
-    - vnc4server
-    - libyaml-dev
-    - python-yaml
-    - numactl
-    - libparted0-dev
-    - libpciaccess-dev
-    - libnuma-dev
-    - libyajl-dev
-    - libxml2-dev
-    - libglib2.0-dev
-    - libnl-dev
-    - python-pip
-    - python-dev
-    - libxml2-dev
-    - libxslt-dev
-    # vMX requiere vnc4server, no puedo usar mi combo favorito
-    # xvfb + x11vnc... lo que si uso es lxde y su display manager lxdm
+    # X2go server, es una solucion con menos latencia que Guacamole + VNC.
     - lxde
     - lxdm
-    # X2go server, es una solucion con menos latencia que Guacamole + VNC.
     - x2goserver
     - x2goserver-xsession
     # GNS3
     - dynamips
     - vpcs
     - gns3
-    # Por si quiero instalar vSRX...
-    - virt-manager
 
 - name: Add ansible user to libvirtd group
   become: yes

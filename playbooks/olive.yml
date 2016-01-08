@@ -1,0 +1,12 @@
+---
+
+- name: Provision Olive server
+  hosts: olive
+  vars:
+    huge_pages: 0
+    apt_repos:
+      - ppa:x2go/stable
+  roles:
+    - kvm
+    - gns3
+    - olive

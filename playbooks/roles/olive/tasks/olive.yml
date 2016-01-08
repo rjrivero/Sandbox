@@ -1,0 +1,29 @@
+---
+
+- name: Create image directory
+  become: yes
+  file:
+    dest: /opt/junos
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0755
+    state: directory
+
+- name: Copy junos olive image
+  copy:
+    src: "{{ junos_image }}"
+    dest: "/opt/junos/{{ junos_image }}"
+    mode: 0644
+
+- name: Create GNS3 configuration dir
+  file:
+    dest: "{{ ansible_env.HOME }}/.gns3"
+    state: directory
+    mode: 0755
+
+- name: Copy GNS3 configuration file
+  template:
+    src: gns3.ini
+    dest: "{{ ansible_env.HOME }}/.gns3/gns3.ini"
+    mode: 0644
+

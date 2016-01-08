@@ -1,7 +1,7 @@
 ---
 
-- name: Provision GNS3 server
-  hosts: gns3
+- name: Provision VMX server
+  hosts: vmx
   vars:
     # Este equipo no va a tener swap. Es una maquina virtual, lo que vamos a
     # hacer es overcommit de memoria (darle mas memoria de la que hay
@@ -24,8 +24,6 @@
     # usarian 3G de large pages, ponle 4G por contar con un poco de overhead:
     # (4 * 1024MB)/2 = 2048 paginas.
     huge_pages: 2048
-    apt_repos:
-      - ppa:x2go/stable
   roles:
     - kvm
-    - gns3
+    - vmx
