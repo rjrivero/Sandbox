@@ -71,11 +71,11 @@ Lo siquiente es desempaquetar el instalador y editarlo para permitir que pueda e
 ```
 mkdir jinst-signed
 cd jinst-signed
-tar -xzvf ../jinstall-13.3R8-domestic-signed.tgz
+tar -xzvf ../jinstall-13.3R8.7-domestic-signed.tgz
 
 mkdir jinst
 cd jinst
-tar -xzvf ../jinstall-13.3R8-domestic.tgz
+tar -xzvf ../jinstall-13.3R8.7-domestic.tgz
 
 mkdir pkgtools
 cd pkgtools
@@ -97,8 +97,8 @@ rm -rf pkgtools
 Y hay que editar un par de ficheros para eliminar las referencias a hw.re.name:
 
 ```
-sed 's/re_name=.*/re_name="olive"/' -- +INSTALL
-sed 's/re_name=.*/re_name="olive"/' -- +REQUIRE
+sed 's/re_name=".*/re_name="olive"/' -- +INSTALL
+sed 's/re_name=".*/re_name="olive"/' -- +REQUIRE
 ```
 
 Y con eso, ya se puede volver a empaquetar el instalador y crear un ISO para facilitar el acceso desde la maquina virtual:
@@ -117,7 +117,8 @@ qemu-system-x86_64 -m 2G -hda olive-base.img -cdrom ~/jinstall-olive.iso -enable
 
 # Dentro de la maquina virtual
 mount /cdrom
-# enter dos veces
+
+# Pulsar Enter dos veces
 pkg_add -f /cdrom/jinstall-olive.tgz
 # Paciencia!
 ```
@@ -125,7 +126,7 @@ pkg_add -f /cdrom/jinstall-olive.tgz
 Al terminar, sugerira reiniciar. No recomiendo hacerlo porque al reiniciar ya no utiliza la salida por consola, sino por puerto serie. Es mejor apagar la maquina (con halt) y volver a lanzarla redirigiendo el puerto:
 
 ```
-qemu-system-x86_64 -m 2G -hda olive-base.img -cdrom ~/jinstall-olive.iso -enable-kvm -serial telnet:0.0.0.0:3000,server
+qemu-system-x86_64 -m 2G -hda olive-base.img -enable-kvm -serial telnet:0.0.0.0:3000,server
 ```
 
 Podemos hacer telnet a **localhost 3000** y ver el progreso del instalador. Una vez terminado, reiniciara y nos encontraremos con el login de **root**, sin password.
@@ -135,3 +136,19 @@ Configuracion
 
 La imagen virtual que hayamos preparado por el procedimiento anterior tendremos que copiarla al directorio **files** del rol. A continuacion, habra que configurar el fichero [vars/main.yml](vars/main-yml), poniendo en la variable **junos_image** el nombre del fichero de imagen.
 
+Core dump en Junos OS
+---------------------
+
+Tras completar la instalacion y empezar a usar la imagen, se detectara que la maquina virtual se reinicia ocasionalmente con el error:
+
+```
+ad1: Standby not armed but state is invalid: state="ARMED"
+```
+
+Para solucionarlo, hay que introducir en modo configuracion el **comando oculto**:
+
+```
+set chassis routing-engine disk no-standby
+```
+
+El origen del problema esta descrito en el articulo (http://kb.juniper.net/InfoCenter/index?page=content&id=KB29164&actp=RSS)
